@@ -201,9 +201,7 @@ function change(data) {
     });
 
   svg.select(".centerYear")
-   .attr("text-anchor", "middle")
-   .text(getCurrentYear())
-   .style({"font-size": "25px"});
+   .text(getCurrentYear());
 
   text.transition().duration(duration)
     .style("opacity", function(d) {
