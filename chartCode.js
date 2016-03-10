@@ -7,10 +7,12 @@
 
 function initializeChart() {
   sliderValChange(document.getElementById("dataYear").value);
-  document.getElementById("startYear").innerHTML=startYear;
-  document.getElementById("endYear").innerHTML=endYear;
+  // Get min and max from dataset
   document.getElementById("dataYear").setAttribute("min",startYear);
   document.getElementById("dataYear").setAttribute("max",endYear);
+  // Min and max year next to sliderbar
+  document.getElementById("startYear").innerHTML=startYear;
+  document.getElementById("endYear").innerHTML=endYear;
 }
 
 function sliderValChange(sliderVal) {
@@ -24,7 +26,7 @@ function sliderValChange(sliderVal) {
 }
 
 function getCurrentYear() {
-  return document.getElementById("sliderVal").innerHTML;
+  return document.getElementById("dataYear").value;
 }
 
 function getData(sliderVal) {
@@ -50,6 +52,21 @@ function yearData(sliderVal) {
   return labelValuePairs;
 }
 
+function autoPlay() {
+  if (getCurrentYear() == endYear) {
+    setTimeout(function(){
+      document.getElementById("dataYear").value = startYear;
+      sliderValChange(document.getElementById("dataYear").value);
+    },
+    1000);
+    return;
+  }
+  // Increment slider value
+  document.getElementById("dataYear").value ++;
+  sliderValChange(document.getElementById("dataYear").value);
+  setTimeout(function(){autoPlay(); }, 1000);
+}
+
 function randomData (){
   var labels = color.domain();
   return labels.map(function(label){
@@ -73,6 +90,11 @@ svg.append("g")
   .attr("class", "labels");
 svg.append("g")
   .attr("class", "lines");
+
+svg.append("text")
+   .attr("text-anchor", "middle")
+   .text(getCurrentYear())
+   .style({"font-size": "25px"}).classed("centerYear", true);
 
 var width = document.getElementById("chart").offsetWidth,
     height = document.getElementById("chart").offsetHeight;
@@ -177,6 +199,11 @@ function change(data) {
     .data(pie(is), key).text(function(d) {
       return d.data.label+": $"+d.data.value;
     });
+
+  svg.select(".centerYear")
+   .attr("text-anchor", "middle")
+   .text(getCurrentYear())
+   .style({"font-size": "25px"});
 
   text.transition().duration(duration)
     .style("opacity", function(d) {

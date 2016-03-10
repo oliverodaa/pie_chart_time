@@ -1,3 +1,28 @@
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<link rel="stylesheet" href="chartStyle.css">
+
+<style>
+#wholeChart {
+  text-align:center;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  position: relative;
+}
+
+#chart {
+  display:inline-block;
+  width:100%;
+  height:500px;
+  margin:10px;
+}
+
+#dataYear {
+  max-width:200px;
+  display:inline;
+  margin-left:auto;
+  margin-right:auto;
+}
+</style>
+
 <!-- Include this HTML Code in the location on the page where you want your chart to go. -->
 
 <div id="wholeChart">
@@ -8,7 +33,8 @@
     <strong>Year</strong>: <span id="sliderVal">0</span><br>
     <span id="startYear"></span>
     <input id="dataYear" type="range" min="1995" max="2000" step="1" value="1995" onchange="sliderValChange(this.value)" />
-    <span id="endYear"></span>
+    <span id="endYear"></span><br>
+    <button onclick="autoPlay()" class="btn btn-info">Autoplay</button>
   </div>
 </div>
 
@@ -27,30 +53,15 @@ var dataVals = {
   1999: [2,2,17,4],
   2000: [50,17,3,4],
   2001: [50,17],
+  2002: [8,90,4000,8000,70]
 };
 
 var currency = "$"; // Appended to beginning of label values
 var startYear = 1995;
-var endYear = 2001;
+var endYear = 2002;
 
 var transitionTime = 1000; // ms per transition
 </script>
 
-<style>
-#wholeChart {
-  text-align:center;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  position: relative;
-}
-
-#chart {
-  display:inline-block;
-  width:100%;
-  height:500px;
-  margin:10px;
-}
-</style>
-
-<link rel="stylesheet" href="chartStyle.css">
 <script src="https://d3js.org/d3.v3.min.js"></script>
 <script src="chartCode.js"></script>
