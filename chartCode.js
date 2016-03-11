@@ -20,7 +20,7 @@ function sliderValChange(sliderVal) {
   document.getElementById("sliderVal").innerHTML=sliderVal;
   // Change the total
   var totalMoney = dataVals[sliderVal].reduce(function(x,y) {return x+y;},0);
-  document.getElementById("pieTotal").innerHTML=totalMoney;
+  document.getElementById("pieTotal").innerHTML=currency+totalMoney.toString();
   // Update the chart to correspond to that year
   change(getData(sliderVal));
 }
@@ -197,7 +197,7 @@ function change(data) {
 
   text = svg.select(".labels").selectAll("text")
     .data(pie(is), key).text(function(d) {
-      return d.data.label+": $"+d.data.value;
+      return d.data.label+": "+currency+d.data.value;
     });
 
   svg.select(".centerYear")
