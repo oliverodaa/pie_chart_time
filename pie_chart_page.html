@@ -1,7 +1,7 @@
 <!-- Include this HTML Code in the location on the page where you want your chart to go. -->
 
 <div id="wholeChart">
-  <h1 id="chartTitle">Administration Spending</h1>
+  <h1 id="chartTitle">Gender Ratio on The Board</h1>
   <div id="chart"></div>
   <h3>Total: <span id="pieTotal"></span></h3>
   <div id="yearSelection">
@@ -20,21 +20,36 @@
 // NOTE: You must keep the same sections for each year.
 // NOTE: Any gaps in the data will break the chart.
 // If you don't have data for that year, include 0s, or change the "step" in the html input slider.
-var labels = ["Admin","Teaching","Nap Pods","Lab Equipment"];
+var labels = ["Male", "Female"];
 var dataVals = {
-  1995: [1,2,3,4],
-  1996: [2,2,3,4],
-  1997: [0,0,0,0],
-  1998: [1,2,3,17],
-  1999: [2,2,17,4],
-  2000: [50,17,3,4],
-  2001: [50,17],
-  2002: [8,90,4000,8000,70]
+1994: [13,5],
+1995: [11,5],
+1996: [13,5],
+1997: [15,6],
+1998: [12,7],
+1999: [11,7],
+2000: [12,7],
+2001: [13,8],
+2002: [13,7],
+2003: [12,7],
+2004: [14,7],
+2005: [14,7],
+2006: [15,6],
+2007: [13,6],
+2008: [13,7],
+2009: [12,8],
+2010: [12,7],
+2011: [12,6],
+2012: [11,6],
+2013: [10,5],
+2014: [13,4],
+2015: [14,4],
+2016: [14,4]
 };
 
-var currency = "$"; // Appended to beginning of label values
+var currency = ""; // Appended to beginning of label values
 var startYear = 1995;
-var endYear = 2002;
+var endYear = 2016;
 
 var transitionTime = 1000; // ms per transition
 </script>
