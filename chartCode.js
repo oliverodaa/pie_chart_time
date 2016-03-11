@@ -52,13 +52,14 @@ function yearData(sliderVal) {
   return labelValuePairs;
 }
 
+function reset() {
+  document.getElementById("dataYear").value = startYear;
+  sliderValChange(document.getElementById("dataYear").value);
+
+}
+
 function autoPlay() {
   if (getCurrentYear() == endYear) {
-    setTimeout(function(){
-      document.getElementById("dataYear").value = startYear;
-      sliderValChange(document.getElementById("dataYear").value);
-    },
-    1000);
     return;
   }
   // Increment slider value
