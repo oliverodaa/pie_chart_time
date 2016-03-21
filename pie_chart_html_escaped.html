@@ -1,0 +1,96 @@
+&lt;!-- Include this HTML Code in the location on the page where you want your chart to go. --&gt;
+
+&lt;div id=&quot;wholeChart&quot;&gt;
+  &lt;h1 id=&quot;chartTitle&quot;&gt;Gender Ratio on The Board&lt;/h1&gt;
+  &lt;div id=&quot;chart&quot;&gt;&lt;/div&gt;
+  &lt;h3&gt;Total: &lt;span id=&quot;pieTotal&quot;&gt;&lt;/span&gt;&lt;/h3&gt;
+  &lt;div id=&quot;yearSelection&quot;&gt;
+    &lt;strong&gt;Year&lt;/strong&gt;: &lt;span id=&quot;sliderVal&quot;&gt;0&lt;/span&gt;&lt;br&gt;
+    &lt;span id=&quot;startYear&quot;&gt;&lt;/span&gt;
+    &lt;input id=&quot;dataYear&quot; type=&quot;range&quot; min=&quot;1995&quot; max=&quot;2000&quot; step=&quot;1&quot; value=&quot;1995&quot; onchange=&quot;sliderValChange(this.value)&quot; /&gt;
+    &lt;span id=&quot;endYear&quot;&gt;&lt;/span&gt;&lt;br&gt;
+    &lt;button onclick=&quot;reset()&quot; class=&quot;btn btn-success&quot;&gt;Reset&lt;/button&gt;
+    &lt;button onclick=&quot;autoPlay()&quot; class=&quot;btn btn-primary&quot;&gt;Autoplay&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+// ======||||| Please modify to your liking ||||||=========
+
+// NOTE: You must keep the same sections for each year.
+// NOTE: Any gaps in the data will break the chart.
+// If you don't have data for that year, include 0s, or change the &quot;step&quot; in the html input slider.
+var labels = [&quot;Male&quot;, &quot;Female&quot;];
+var dataVals = {
+1994: [13,5],
+1995: [11,5],
+1996: [13,5],
+1997: [15,6],
+1998: [12,7],
+1999: [11,7],
+2000: [12,7],
+2001: [13,8],
+2002: [13,7],
+2003: [12,7],
+2004: [14,7],
+2005: [14,7],
+2006: [15,6],
+2007: [13,6],
+2008: [13,7],
+2009: [12,8],
+2010: [12,7],
+2011: [12,6],
+2012: [11,6],
+2013: [10,5],
+2014: [13,4],
+2015: [14,4],
+2016: [14,4]
+};
+
+var currency = &quot;&quot;; // Appended to beginning of label values
+var startYear = 1995;
+var endYear = 2016;
+
+var transitionTime = 1000; // ms per transition
+&lt;/script&gt;
+
+&lt;!-- // ======||||| You can safely ignore everything under this line ||||||========= --&gt;
+
+&lt;style&gt;
+#wholeChart {
+  text-align:center;
+  position: relative;
+}
+
+#chart {
+  display:inline-block;
+  width:100%;
+  height:500px;
+  margin:10px;
+}
+
+#dataYear {
+  max-width:200px;
+  display:inline;
+  margin-left:auto;
+  margin-right:auto;
+}
+svg{
+  width: 100%;
+  height: 100%;
+}
+path.slice{
+  stroke-width:2px;
+}
+
+polyline{
+  opacity: .3;
+  stroke: black;
+  stroke-width: 2px;
+  fill: none;
+}
+&lt;/style&gt;
+
+&lt;script src=&quot;https://d3js.org/d3.v3.min.js&quot;&gt;&lt;/script&gt;
+
+&lt;script&gt;function initializeChart(){sliderValChange(document.getElementById(&quot;dataYear&quot;).value),document.getElementById(&quot;dataYear&quot;).setAttribute(&quot;min&quot;,startYear),document.getElementById(&quot;dataYear&quot;).setAttribute(&quot;max&quot;,endYear),document.getElementById(&quot;startYear&quot;).innerHTML=startYear,document.getElementById(&quot;endYear&quot;).innerHTML=endYear}function sliderValChange(e){document.getElementById(&quot;sliderVal&quot;).innerHTML=e;var t=dataVals[e].reduce(function(e,t){return e+t},0);document.getElementById(&quot;pieTotal&quot;).innerHTML=currency+t.toString(),change(getData(e))}function getCurrentYear(){return document.getElementById(&quot;dataYear&quot;).value}function getData(e){return yearData(e)}function yearData(e){for(var t=color.domain(),a=[],r=dataVals[e],n=Math.min(t.length,r.length),l=0;n&gt;l;l++){var i={label:t[l],value:r[l]};a.push(i)}return a}function reset(){document.getElementById(&quot;dataYear&quot;).value=startYear,sliderValChange(document.getElementById(&quot;dataYear&quot;).value)}function autoPlay(){getCurrentYear()!=endYear&amp;&amp;(document.getElementById(&quot;dataYear&quot;).value++,sliderValChange(document.getElementById(&quot;dataYear&quot;).value),setTimeout(function(){autoPlay()},1e3))}function randomData(){var e=color.domain();return e.map(function(e){return{label:e,value:Math.random()}}).filter(function(){return Math.random()&gt;.5}).sort(function(e,t){return d3.ascending(e.label,t.label)})}function mergeWithFirstEqualZero(e,t){var a=d3.set();t.forEach(function(e){a.add(e.label)});var r=e.filter(function(e){return!a.has(e.label)}).map(function(e){return{label:e.label,value:0}});return d3.merge([t,r]).sort(function(e,t){return d3.ascending(e.label,t.label)})}function change(e){function t(e){return e.startAngle+(e.endAngle-e.startAngle)/2}var a=transitionTime,r=svg.select(&quot;.slices&quot;).selectAll(&quot;path.slice&quot;).data().map(function(e){return e.data});0===r.length&amp;&amp;(r=e);var n=mergeWithFirstEqualZero(e,r),l=mergeWithFirstEqualZero(r,e),i=svg.select(&quot;.slices&quot;).selectAll(&quot;path.slice&quot;).data(pie(n),key);i.enter().insert(&quot;path&quot;).attr(&quot;class&quot;,&quot;slice&quot;).style(&quot;fill&quot;,function(e){return color(e.data.label)}).each(function(e){this._current=e}),i=svg.select(&quot;.slices&quot;).selectAll(&quot;path.slice&quot;).data(pie(l),key),i.transition().duration(a).attrTween(&quot;d&quot;,function(e){var t=d3.interpolate(this._current,e),a=this;return function(e){return a._current=t(e),arc(a._current)}}),i=svg.select(&quot;.slices&quot;).selectAll(&quot;path.slice&quot;).data(pie(e),key),i.exit().transition().delay(a).duration(0).remove();var s=svg.select(&quot;.labels&quot;).selectAll(&quot;text&quot;).data(pie(n),key);s.enter().append(&quot;text&quot;).attr(&quot;dy&quot;,&quot;.35em&quot;).style(&quot;opacity&quot;,0).text(function(e){return e.data.label}).each(function(e){this._current=e}),s=svg.select(&quot;.labels&quot;).selectAll(&quot;text&quot;).data(pie(l),key).text(function(e){return e.data.label+&quot;: &quot;+currency+e.data.value}),svg.select(&quot;.centerYear&quot;).text(getCurrentYear()),s.transition().duration(a).style(&quot;opacity&quot;,function(e){return 0===e.data.value?0:1}).attrTween(&quot;transform&quot;,function(e){var a=d3.interpolate(this._current,e),r=this;return function(e){var n=a(e);r._current=n;var l=outerArc.centroid(n);return l[0]=radius*(t(n)&lt;Math.PI?1:-1),&quot;translate(&quot;+l+&quot;)&quot;}}).styleTween(&quot;text-anchor&quot;,function(e){var a=d3.interpolate(this._current,e);return function(e){var r=a(e);return t(r)&lt;Math.PI?&quot;start&quot;:&quot;end&quot;}}),s=svg.select(&quot;.labels&quot;).selectAll(&quot;text&quot;).data(pie(e),key),s.exit().transition().delay(a).remove();var u=svg.select(&quot;.lines&quot;).selectAll(&quot;polyline&quot;).data(pie(n),key);u.enter().append(&quot;polyline&quot;).style(&quot;opacity&quot;,0).each(function(e){this._current=e}),u=svg.select(&quot;.lines&quot;).selectAll(&quot;polyline&quot;).data(pie(l),key),u.transition().duration(a).style(&quot;opacity&quot;,function(e){return 0===e.data.value?0:.5}).attrTween(&quot;points&quot;,function(e){this._current=this._current;var a=d3.interpolate(this._current,e),r=this;return function(e){var n=a(e);r._current=n;var l=outerArc.centroid(n);return l[0]=.95*radius*(t(n)&lt;Math.PI?1:-1),[arc.centroid(n),outerArc.centroid(n),l]}}),u=svg.select(&quot;.lines&quot;).selectAll(&quot;polyline&quot;).data(pie(e),key),u.exit().transition().delay(a).remove()}var color=d3.scale.category20().domain(labels),svg=d3.select(&quot;#chart&quot;).append(&quot;svg&quot;).append(&quot;g&quot;);svg.append(&quot;g&quot;).attr(&quot;class&quot;,&quot;slices&quot;),svg.append(&quot;g&quot;).attr(&quot;class&quot;,&quot;labels&quot;),svg.append(&quot;g&quot;).attr(&quot;class&quot;,&quot;lines&quot;),svg.append(&quot;text&quot;).attr(&quot;text-anchor&quot;,&quot;middle&quot;).text(getCurrentYear()).style({&quot;font-size&quot;:&quot;25px&quot;}).classed(&quot;centerYear&quot;,!0);var width=document.getElementById(&quot;chart&quot;).offsetWidth,height=document.getElementById(&quot;chart&quot;).offsetHeight;radius=Math.min(width-300,height)/2;var pie=d3.layout.pie().sort(null).value(function(e){return e.value}),arc=d3.svg.arc().outerRadius(.8*radius).innerRadius(.4*radius),outerArc=d3.svg.arc().innerRadius(.9*radius).outerRadius(.9*radius);svg.attr(&quot;transform&quot;,&quot;translate(&quot;+width/2+&quot;,&quot;+height/2+&quot;)&quot;);var key=function(e){return e.data.label};initializeChart();&lt;/script&gt;
