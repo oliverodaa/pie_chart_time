@@ -9,3 +9,7 @@ pie_chart_time
 This is a simple project to fill a need for a specific client on a web project.
 
 Essentially, the client wanted a pie chart whose value changes according to a slider bar in the UI. So, for example, the pie chart might initially show data for 1995, then you can move the slider so it shows a data set for 1996, 1997, etc. This code does that.
+
+DEMO
+===
+http://ollie-odonnell.com/piecharttime
